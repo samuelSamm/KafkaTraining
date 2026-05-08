@@ -29,4 +29,9 @@ public class VentaController {
     public Orden consultarOrden(@PathVariable String id) {
         return ordenService.obtenerOrden(id);
     }
+
+    @PutMapping("/actualizar")
+    public Orden actualizarOrden(@RequestBody Orden orden){
+        return ordenService.actualizarOrden(orden);
+    }
 }

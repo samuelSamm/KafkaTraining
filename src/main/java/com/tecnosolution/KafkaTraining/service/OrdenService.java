@@ -2,6 +2,7 @@ package com.tecnosolution.KafkaTraining.service;
 
 import com.tecnosolution.KafkaTraining.model.Orden;
 import com.tecnosolution.KafkaTraining.repository.OrdenRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -19,5 +20,11 @@ public class OrdenService {
     public Orden obtenerOrden(String id) {
         System.out.println("🚀 Buscando en Base de Datos H2 para el ID: " + id);
         return ordenRepository.findById(id).orElse(null);
+    }
+
+    @CacheEvict(value = "ordenes", key = "#orden.idOrden")
+    public Orden actualizarOrden(Orden orden){
+        System.out.println("🚀 Actualizando orden en BD y borrando cache para el ID:"+orden.getIdOrden());
+        return ordenRepository.save(orden);
     }
 }
