@@ -6,6 +6,8 @@ import com.tecnosolution.KafkaTraining.service.OrdenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/ventas")
 public class VentaController {
@@ -19,10 +21,12 @@ public class VentaController {
     }
 
     @PostMapping("/crear/{idOrden}")
-    public ResponseEntity<String> crearOrden(@PathVariable String idOrden) {
+    public ResponseEntity<String> crearOrden(@PathVariable String idOrden, Principal principal) {
+        System.out.println("En el controller de Venta, podemos obtener el nombre del usuario para log de auditoria.");
+        System.out.println("Usuario: "+principal.getName());
         // Llamamos al producer para iniciar el flujo asíncrono
         ventaProducer.enviarOrden(idOrden);
-        return ResponseEntity.ok("Orden " + idOrden + " recibida y enviada a la cola de procesamiento.");
+        return ResponseEntity.ok("Orden " + idOrden + " recibida y enviada a la cola de procesamiento. Por el usuario: "+principal.getName());
     }
 
     @GetMapping("/orden/{id}")
